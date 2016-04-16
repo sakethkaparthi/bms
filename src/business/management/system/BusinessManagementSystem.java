@@ -6,6 +6,7 @@
 package business.management.system;
 
 import business.management.system.APImodels.Query;
+import business.management.system.APImodels.Quote;
 import business.management.system.APImodels.Stock;
 import java.sql.*;
 import retrofit2.Call;
@@ -43,7 +44,9 @@ public class BusinessManagementSystem {
 
             @Override
             public void onResponse(Call<Stock> call, Response<Stock> rspns) {
-                System.out.println(rspns.body().getQuery().getCount());
+                for(Quote quote : rspns.body().getQuery().getResults().getQuote()){
+                    System.out.println(quote.getName() + " " + quote.getChange());
+                }
             }
 
             @Override
