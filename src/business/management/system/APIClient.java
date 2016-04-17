@@ -32,7 +32,7 @@ public class APIClient {
     return service;
     }
     public interface YahooService {
-        @GET("yql?q=select * from yahoo.finance.quote where symbol in (\"YHOO\",\"AAPL\",\"GOOG\",\"MSFT\")&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=")
+        @GET("yql?q=select * from yahoo.finance.quote where symbol in (\"YHOO\",\"AAPL\",\"MSFT\")&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=")
         Call<Stock> getStocks();
 }
     

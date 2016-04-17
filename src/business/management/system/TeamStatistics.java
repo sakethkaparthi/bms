@@ -5,17 +5,38 @@
  */
 package business.management.system;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JPanel;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.PieDataset;
+
 /**
  *
  * @author saketh
  */
-public class Home extends javax.swing.JFrame {
+public class TeamStatistics extends javax.swing.JFrame {
 
     /**
-     * Creates new form Home
+     * Creates new form TeamStatistics
      */
-    public Home() {
+    public TeamStatistics() throws SQLException {
         initComponents();
+        JFreeChart pieChart = ChartFactory.createPieChart(
+         "Completed projects",           
+         createPieDataset()     
+         );
+        ChartPanel chartPanel1 = new ChartPanel( pieChart );        
+        chartPanel1.setPreferredSize(new java.awt.Dimension( 560 , 367 ) );       
+        add(chartPanel1);
+        JPanel panel = new JPanel();
+        panel.add(chartPanel1);
+        setContentPane(panel);
     }
 
     /**
@@ -28,7 +49,6 @@ public class Home extends javax.swing.JFrame {
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(118, 171, 223));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -61,24 +81,39 @@ public class Home extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TeamStatistics.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TeamStatistics.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TeamStatistics.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TeamStatistics.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Home().setVisible(true);
+                try {
+                    new TeamStatistics().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(TeamStatistics.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+
+    private PieDataset createPieDataset() throws SQLException {
+         DefaultPieDataset dataset = new DefaultPieDataset( );
+        ResultSet rs = Methods.getTeamProjectCount();
+        while(rs.next()){
+            int id = rs.getInt("team_id");
+            int count = rs.getInt(2);
+            dataset.setValue("team id: " + id, new Double(count));
+        }
+        return dataset;
+    }
 }

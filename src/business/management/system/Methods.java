@@ -25,7 +25,7 @@ public class Methods {
     static Statement stmt = null;
     
     
-    public static void insertIntoEmloyee(String id,String name,String designation,long salary, int teamId){
+    public static void insertIntoEmloyee(String id,String name,String address,String email,String phone,String designation,long salary, int teamId){
         try{
       //STEP 2: Register JDBC driver
       Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -42,6 +42,9 @@ public class Methods {
       sql = "INSERT INTO employee " +
                    "VALUES('"+id+"','"+
                             name+"','"+
+                            address+"','"+
+                            email+"','"+
+                            phone+"','"+
                             designation+"',"+
                             salary+","+
                             teamId+")";
@@ -238,6 +241,85 @@ public class Methods {
    }
     }
     
+    public static void insertIntoSchedule(int teamId,String Schedule){
+        try{
+      //STEP 2: Register JDBC driver
+      Class.forName("oracle.jdbc.driver.OracleDriver");
+
+      //STEP 3: Open a connection
+      System.out.println("Connecting to a selected database...");
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+      System.out.println("Connected database successfully...");
+      
+      //STEP 4: Execute a query
+      System.out.println("Inserting records into the table...");
+      stmt = conn.createStatement();
+      String sql = null;
+      sql = "INSERT INTO schedule " +
+                   "VALUES("+teamId+",'"+
+                            Schedule+"')";
+      stmt.executeUpdate(sql);
+      System.out.println("Inserted records into the table...");
+
+   }
+   catch(Exception e){
+      //Handle errors for Class.forName
+      e.printStackTrace();
+   }finally{
+      //finally block used to close resources
+      try{
+         if(stmt!=null)
+            conn.close();
+      }catch(SQLException se){
+      }// do nothing
+      try{
+         if(conn!=null)
+            conn.close();
+      }catch(SQLException se){
+         se.printStackTrace();
+      }//end finally try
+   }
+    }
+    public static void insertIntoUserPass(String userName,String password){
+        try{
+      //STEP 2: Register JDBC driver
+      Class.forName("oracle.jdbc.driver.OracleDriver");
+
+      //STEP 3: Open a connection
+      System.out.println("Connecting to a selected database...");
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+      System.out.println("Connected database successfully...");
+      
+      //STEP 4: Execute a query
+      System.out.println("Inserting records into the table...");
+      stmt = conn.createStatement();
+      String sql = null;
+      sql = "INSERT INTO userpass " +
+                   "VALUES('"+userName+"','"+
+                            password+"')";
+      stmt.executeUpdate(sql);
+      System.out.println("Inserted records into the table...");
+
+   }
+   catch(Exception e){
+      //Handle errors for Class.forName
+      e.printStackTrace();
+   }finally{
+      //finally block used to close resources
+      try{
+         if(stmt!=null)
+            conn.close();
+      }catch(SQLException se){
+      }// do nothing
+      try{
+         if(conn!=null)
+            conn.close();
+      }catch(SQLException se){
+         se.printStackTrace();
+      }//end finally try
+   }
+    }
+
     public static ResultSet getEmployees() throws SQLException{
       conn = DriverManager.getConnection(DB_URL, USER, PASS);
       stmt = conn.createStatement();
@@ -245,6 +327,7 @@ public class Methods {
       ResultSet rs = stmt.executeQuery(sql);
       return rs;
     }
+    
     public static ResultSet getProjects() throws SQLException{
       conn = DriverManager.getConnection(DB_URL, USER, PASS);
       stmt = conn.createStatement();
@@ -260,6 +343,7 @@ public class Methods {
       ResultSet rs = stmt.executeQuery(sql);
       return rs;
     }
+    
     public static ResultSet getRecords() throws SQLException{
       conn = DriverManager.getConnection(DB_URL, USER, PASS);
       stmt = conn.createStatement();
@@ -267,12 +351,76 @@ public class Methods {
       ResultSet rs = stmt.executeQuery(sql);
       return rs;
     }
+    
     public static ResultSet getClients() throws SQLException{
       conn = DriverManager.getConnection(DB_URL, USER, PASS);
       stmt = conn.createStatement();
       String sql = "SELECT * FROM client";
       ResultSet rs = stmt.executeQuery(sql);
       return rs;
+    }
+    
+    public static ResultSet getTeamProjectCount() throws SQLException{
+        conn = DriverManager.getConnection(DB_URL, USER, PASS);
+      stmt = conn.createStatement();
+      String sql = "select team_id,count(*) from project where status = 'complete' group by team_id";
+      ResultSet rs = stmt.executeQuery(sql);
+      return rs;
+    }
+    
+    public static ResultSet getSchedules() throws SQLException{
+        conn = DriverManager.getConnection(DB_URL, USER, PASS);
+      stmt = conn.createStatement();
+      String sql = "select * from schedule";
+      ResultSet rs = stmt.executeQuery(sql);
+      return rs;
+    }
+    
+    public static ResultSet getUserData() throws SQLException{
+        conn = DriverManager.getConnection(DB_URL, USER, PASS);
+      stmt = conn.createStatement();
+      String sql = "select * from userpass";
+      ResultSet rs = stmt.executeQuery(sql);
+      return rs;
+    }
+    
+    public static void updatePassword(String username,String password) throws SQLException{
+        try{
+      //STEP 2: Register JDBC driver
+      Class.forName("oracle.jdbc.driver.OracleDriver");
+
+      //STEP 3: Open a connection
+      System.out.println("Connecting to a selected database...");
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+      System.out.println("Connected database successfully...");
+      
+      //STEP 4: Execute a query
+      System.out.println("Inserting records into the table...");
+      stmt = conn.createStatement();
+      String sql = null;
+      sql = "update userpass set password='"+password+"'"
+              + "where username ='"+username+"')";
+      stmt.executeUpdate(sql);
+      System.out.println("Inserted records into the table...");
+
+   }
+   catch(Exception e){
+      //Handle errors for Class.forName
+      e.printStackTrace();
+   }finally{
+      //finally block used to close resources
+      try{
+         if(stmt!=null)
+            conn.close();
+      }catch(SQLException se){
+      }// do nothing
+      try{
+         if(conn!=null)
+            conn.close();
+      }catch(SQLException se){
+         se.printStackTrace();
+      }//end finally try
+   }
     }
     
 }
