@@ -5,13 +5,18 @@
  */
 package business.management.system;
 
-import business.management.system.APImodels.Query;
+
 import business.management.system.APImodels.Stock;
+import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
+import retrofit2.http.Url;
 
 /**
  *
@@ -32,8 +37,8 @@ public class APIClient {
     return service;
     }
     public interface YahooService {
-        @GET("yql?q=select * from yahoo.finance.quote where symbol in (\"YHOO\",\"AAPL\",\"MSFT\")&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=")
-        Call<Stock> getStocks();
+        @GET
+        Call<Stock> getStocks(@Url String url);
 }
     
 }

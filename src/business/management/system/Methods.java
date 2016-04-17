@@ -399,7 +399,43 @@ public class Methods {
       stmt = conn.createStatement();
       String sql = null;
       sql = "update userpass set password='"+password+"'"
-              + "where username ='"+username+"')";
+              + "where username ='"+username+"'";
+      stmt.executeUpdate(sql);
+      System.out.println("Inserted records into the table...");
+
+   }
+   catch(Exception e){
+      //Handle errors for Class.forName
+      e.printStackTrace();
+   }finally{
+      //finally block used to close resources
+      try{
+         if(stmt!=null)
+            conn.close();
+      }catch(SQLException se){
+      }// do nothing
+      try{
+         if(conn!=null)
+            conn.close();
+      }catch(SQLException se){
+         se.printStackTrace();
+      }//end finally try
+   }
+    }
+
+    static void updateSchedule(int parseInt, String toString) {
+        try{
+      //STEP 2: Register JDBC driver
+      Class.forName("oracle.jdbc.driver.OracleDriver");
+
+      //STEP 3: Open a connection
+      System.out.println("Connecting to a selected database...");
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+      System.out.println("Connected database successfully...");
+      stmt = conn.createStatement();
+      String sql = null;
+      sql = "update schedule set schedule='"+toString+"'"
+              + "where team_id ="+parseInt;
       stmt.executeUpdate(sql);
       System.out.println("Inserted records into the table...");
 

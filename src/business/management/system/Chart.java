@@ -33,27 +33,28 @@ public class Chart extends javax.swing.JFrame {
     /**
      * Creates new form Chart
      */
-    public Chart() throws SQLException {
+    public Chart(CategoryDataset dataset) throws SQLException {
         initComponents();
         JFreeChart barChart = ChartFactory.createBarChart(
          "Stock quote",           
          "Category",            
          "Score",            
-         createDataset(),          
+         dataset,          
          PlotOrientation.VERTICAL,           
          true, true, false);
         JPanel panel = new JPanel();
         ChartPanel chartPanel = new ChartPanel( barChart );        
         chartPanel.setPreferredSize(new java.awt.Dimension( 560 , 367 ) );        
         panel.add(chartPanel);
-        JFreeChart pieChart = ChartFactory.createPieChart(
+        setContentPane(panel);
+        /*JFreeChart pieChart = ChartFactory.createPieChart(
          "Completed projects",           
          createPieDataset()     
          );
         ChartPanel chartPanel1 = new ChartPanel( pieChart );        
         chartPanel.setPreferredSize(new java.awt.Dimension( 560 , 367 ) );       
         panel.add(chartPanel1);
-        setContentPane(panel); 
+        setContentPane(panel); */
     }
 
     /**
@@ -109,15 +110,7 @@ public class Chart extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    new Chart().setVisible(true);
-                } catch (SQLException ex) {
-                    Logger.getLogger(Chart.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
+        
         
         
     }
@@ -132,24 +125,7 @@ public class Chart extends javax.swing.JFrame {
       final String dh = "days high";        
       final DefaultCategoryDataset dataset = 
       new DefaultCategoryDataset( );             
-       Call<Stock> call = APIClient.getAPI().getStocks();
-        call.enqueue(new Callback<Stock>() {
-
-            @Override
-            public void onResponse(Call<Stock> call, Response<Stock> rspns) {
-                for(Quote quote : rspns.body().getQuery().getResults().getQuote()){
-                    dataset.addValue(Double.parseDouble(quote.getChange()), quote.getName(), change);
-                    dataset.addValue(Double.parseDouble(quote.getLastTradePriceOnly()), quote.getName(), price);
-                    dataset.addValue(Double.parseDouble(quote.getDaysLow()), quote.getName(), dl);
-                    dataset.addValue(Double.parseDouble(quote.getDaysHigh()), quote.getName(), dh);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Stock> call, Throwable thrwbl) {
-                
-            }
-        });
+      
       return dataset; 
     }
 

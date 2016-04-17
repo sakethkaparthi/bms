@@ -176,7 +176,7 @@ public class loginpage extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Invalid username/passowrd");
         else{
             this.setVisible(false);
-            new AfterLogin().setVisible(true);
+            new Home().setVisible(true);
         }
         }
         catch(SQLException e){
